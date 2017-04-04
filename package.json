@@ -1,0 +1,82 @@
+{
+  "name": "workflow",
+  "version": "0.0.1",
+  "description": "my workflow",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "global:package": "npm i -g node-sass babel-cli babel-preset-latest pug pug-cli browser-sync parallelshell rimraf mkdirp uncss postcss-cli autoprefixer buildify useref useref-cli html-minifier copy imagemin imagemin-cli imagemin-pngquant imagemin-jpeg-recompress imagemin-webp imagemin-svgo imagemin-gifsicle onchange jquery",
+    "dev:package": "npm i -D node-sass babel-cli babel-preset-latest pug pug-cli browser-sync parallelshell rimraf mkdirp uncss postcss-cli autoprefixer buildify useref useref-cli html-minifier copy imagemin imagemin-cli imagemin-pngquant imagemin-jpeg-recompress imagemin-webp imagemin-svgo imagemin-gifsicle onchange jquery",
+    "sass": "node-sass -o dist/css src/scss --source-map-embed",
+    "babel": "babel src/es6/ -d src/js/",
+    "pug": "pug -w -P -o dist/ -p src/pug/partials/ -O src/pug/options.json src/pug/templates/",
+    "watch:pug": "onchange src/pug/templates/*.pug -- npm run pug",
+    "build:css": "npm run sass && npm run autoprefixer",
+    "watch:css": "onchange src/scss/*.scss -- npm run build:css",
+    "build:babel": "npm run babel",
+    "watch:babel": "onchange src/es6/ -- npm run babel",
+    "js": "browserify src/js/index.js > dist/js/bundle.js",
+    "watch:js": "onchange src/js/index.js -- npm run js",
+    "dev": "parallelshell \"npm run watch:js\" \"npm run watch:css\" \"npm run watch:pug\" \"npm run watch:babel\" \"npm run serv -s\"",
+    "clean": "rimraf dist/*",
+    "build:folders": "mkdirp dist/css dist/js dist/img",
+    "uncss": "uncss -u uncss.json \"src/*.+(html|php)\" > dist/css/style.css",
+    "autoprefixer": "postcss --use autoprefixer --autoprefixer.browsers '> 5%, ie 9' -r dist/css/* ",
+    "min:css-js": "node buildify",
+    "useref": "useref \"src/**/*.+(html|php)\" dist",
+    "htmlmin": "html-minifier --html5 --remove-comments --collapse-whitespace --input-dir dist/ --output-dir dist/",
+    "statics": "node statics",
+    "imagemin": "imagemin \"src/img/*.+(jpg|png)\" -o dist/img/ -p=pngquant -p=jpeg-recompress",
+    "webp": "imagemin \"dist/img/*.jpg\" -o dist/img/ -p=webp",
+    "svgmin": "imagemin \"src/img/*.svg\" -o dist/img/ -p=svgo",
+    "gifmin": "imagemin \"src/img/*.gif\" -o dist/img/ -p=gifsicle",
+    "build:frontend": "npm run uncss && npm run min:css-js  && npm run useref && npm run htmlmin",
+    "build:media": "npm run imagemin && npm run webp && npm run svgmin && npm run gifmin",
+    "build:dist": "npm run clean && npm run build:folders && npm run build:frontend && npm run build:media",
+    "serv": "browser-sync start --server dist --files dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atrodriguez88/workflow.git"
+  },
+  "keywords": [
+    "frontend"
+  ],
+  "author": "Ariel Triana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atrodriguez88/workflow/issues"
+  },
+  "homepage": "https://github.com/atrodriguez88/workflow#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "babel-cli": "^6.24.0",
+    "babel-preset-latest": "^6.24.0",
+    "browser-sync": "^2.18.8",
+    "buildify": "^0.4.0",
+    "copy": "^0.3.0",
+    "html-minifier": "^3.4.2",
+    "imagemin": "^5.2.2",
+    "imagemin-cli": "^3.0.0",
+    "imagemin-gifsicle": "^5.1.0",
+    "imagemin-jpeg-recompress": "^5.1.0",
+    "imagemin-pngquant": "^5.0.0",
+    "imagemin-svgo": "^5.2.1",
+    "imagemin-webp": "^4.0.0",
+    "jquery": "^3.2.1",
+    "mkdirp": "^0.5.1",
+    "node-sass": "^4.5.2",
+    "onchange": "^3.2.1",
+    "parallelshell": "^2.0.0",
+    "postcss-cli": "^3.0.0",
+    "pug": "^2.0.0-beta11",
+    "pug-cli": "^1.0.0-alpha6",
+    "rimraf": "^2.6.1",
+    "uncss": "^0.14.1",
+    "useref": "^1.2.0",
+    "useref-cli": "^1.0.0"
+  },
+  "dependencies": {
+    "pug": "^2.0.0-beta9"
+  }
+}

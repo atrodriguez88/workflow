@@ -1,0 +1,6 @@
+@mixin special{
+    //color: blueligth;
+}
+@mixin border($px){
+    border: $px;
+}
